@@ -1,0 +1,289 @@
+package com.cg.bean;
+
+public class Employee {
+	private int Eid;
+	private String Ename;
+	private double salary;
+	private String designation;
+	
+	public Employee() {
+		// TODO Auto-generated constructor stub
+	}
+	public Employee(int eid, String ename, double salary, String designation) {
+		super();
+		this.Eid = eid;
+		this.Ename = ename;
+		this.salary = salary;
+		this.designation = designation;
+		
+	}
+	public int getEid() {
+		return Eid;
+	}
+	public void setEid(int eid) {
+		Eid = eid;
+	}
+	public String getEname() {
+		return Ename;
+	}
+	public void setEname(String ename) {
+		Ename = ename;
+	}
+	public double getSalary() {
+		return salary;
+	}
+	public void setSalary(double salary) {
+		this.salary = salary;
+	}
+	public String getDesignation() {
+		return designation;
+	}
+	public void setDesignation(String designation) {
+		this.designation = designation;
+	}
+	
+	@Override
+	public String toString() {
+		return "Employee [Eid=" + Eid + ", Ename=" + Ename + ", salary=" + salary + ", designation=" + designation
+				+ " ]";
+	}
+	
+
+}
+
+
+
+package com.cg.pl;
+import java.util.HashMap;
+import java.io.*;
+import java.util.Map;
+import com.cg.bean.*;
+import com.cg.service.*;
+import java.util.*;
+public class Driver {
+
+	public static void main(String[] args) throws NumberFormatException, IOException {
+		// TODO Auto-generated method stub
+		EmployeeService service=new EmployeeService();
+	    Map<Long,Employee> acc=new TreeMap<Long,Employee>();
+		BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
+		String choice="";
+		while(true)
+		{
+		System.out.println("Menu");
+		System.out.println("======================");
+		System.out.println("1 for creating employee");
+		System.out.println("2 for calculating scheme");
+		System.out.println("3 for display");
+		System.out.println("4 for exit");
+		choice=br.readLine();
+		switch(choice)
+		{
+		case "1":int eid=0;String ename=""; double salary=0.0; String designation="";
+			     System.out.println("employee id");
+			     while(true)
+			     {
+			    	 String s_id=br.readLine();
+			    	 boolean c=Validator.validate(s_id, Validator.idpattern);
+			    	 if(c==true)
+			    	 {
+			    		 try {
+			    		 eid=Integer.parseInt(s_id);
+			    		 break;
+			    	          }
+			    		 catch(NumberFormatException e)
+			    		 {
+			    			 System.out.println("Enter employee number in numeric");
+			    		 }
+			         }
+			    	 else
+			    	 {
+			    		 System.out.println("Enter id in 3 digits");
+			    	 }
+		         }//end of employee id while
+		         
+			     System.out.println("employee name");
+			     while(true)
+			     {
+			    	 String s_na=br.readLine();
+			    	 boolean c=Validator.validate(s_na, Validator.namepattern);
+			    	 if(c==true)
+			    	 {
+			    		 try {
+			    		 ename=s_na;
+			    		 break;
+			    	          }
+			    		 catch(NumberFormatException e)
+			    		 {
+			    			 System.out.println("Enter employee number in alphabetical order");
+			    		 }
+			         }
+			    	 else
+			    	 {
+			    		 System.out.println("Enter name in correct format");
+			    	 }
+		         }//end of employee name while
+		         
+			     System.out.println("employee designation");
+			     while(true)
+			     {
+			    	 String s_d=br.readLine();
+			    	 boolean c=Validator.validate(s_d, Validator.despattern);
+			    	 if(c==true)
+			    	 {
+			    		 try {
+			    		 designation=s_d;
+			    		 break;
+			    	          }
+			    		 catch(NumberFormatException e)
+			    		 {
+			    			 System.out.println("Enter employee designation in alphabets");
+			    		 }
+			         }
+			    	 else
+			    	 {
+			    		 System.out.println("Enter designation again");
+			    	 }
+		         }//end of employee id while
+			     System.out.println("employee salary");
+			     while(true)
+			     {
+			    	 String s_sa=br.readLine();
+			    	 boolean c=Validator.validate(s_sa, Validator.salpattern);
+			    	 if(c==true)
+			    	 {
+			    		 try {
+			    		 salary=Double.parseDouble(s_sa);
+			    		 break;
+			    	          }
+			    		 catch(NumberFormatException e)
+			    		 {
+			    			 System.out.println("Enter employee salary in numeric");
+			    		 }
+			         }
+			    	 else
+			    	 {
+			    		 System.out.println("Enter salary again ");
+			    	 }
+			    	 if(salary>0)
+			    	   {
+			    		 Employee ob=new Employee(eid,ename,salary,designation);
+			    		 acc.put((long)ob.getEid(),ob);
+			    		 System.out.println(acc);
+			    		 break;
+			    	 }
+			    	 else {
+			    		System.out.println("Salary can not be less than zero");
+			    	}
+		         }//end of employee id while
+			     System.out.println(acc);
+		        break;
+		      
+		case "2":System.out.println("enter employee id ");
+		         eid=Integer.parseInt(br.readLine());
+		         System.out.println(service.calculateScheme(acc.get(eid)));
+		         break;
+		      
+		case "3":System.out.println("The details for employees are");
+		         System.out.println("=============================");
+		         Collection<Employee> vc=acc.values();
+		         List<Employee> acclist=new ArrayList<Employee>(vc);
+		         for(Employee o:acclist)
+		         {
+		        	 service.display(o);
+		         }
+		         break;
+		         
+		case "4":System.out.println("System exiting");
+		         System.exit(0);
+		         break;
+		         
+		default:System.out.println("wrong choice");
+		}
+		}
+	}
+}
+		
+		
+		package com.cg.service;
+import com.cg.bean.*;
+import java.util.*;
+public class EmployeeService implements Transaction{
+Scanner in=new Scanner(System.in);
+	@Override
+	public void getdetails() {
+		// TODO Auto-generated method stub
+		System.out.println("enter the details for user");
+		int eid=in.nextInt();
+		String name=in.nextLine();
+		double salary=in.nextDouble();
+		String designation=in.nextLine();
+		Employee e=new Employee(eid,name,salary,designation);		
+	}
+
+	@Override
+	public String calculateScheme(Employee e) {
+		// TODO Auto-generated method stub
+		String scheme="";
+		if(e.getSalary()>5000 && e.getSalary()<20000 && e.getDesignation().equals("System Associate"))
+		{
+			scheme="Scheme C";
+		}
+		else if(e.getSalary()>=20000 && e.getSalary()<40000 && e.getDesignation().equals("Programmer"))
+		{
+			scheme="Scheme B";
+		}
+		else if(e.getSalary()>=40000 && e.getDesignation().equals("Manager"))
+		{
+			scheme="Scheme A";
+		}
+		else
+		{
+			scheme="No Scheme";
+		}
+		return scheme;
+	}
+	
+
+}
+
+
+package com.cg.service;
+import com.cg.bean.*;
+
+public interface Transaction {
+	public void getdetails();
+	public String calculateScheme(Employee e);
+	public default void display(Employee e)
+	{
+		System.out.println("==========================");
+		System.out.println("Employee id= "+e.getEid()+" Name= "+e.getEname());
+		System.out.println("Salary is= "+e.getSalary()+" designation is= "+e.getDesignation());
+		
+	}
+
+}
+
+package com.cg.service;
+
+public interface Validator {
+	String idpattern="[1-9][0-9]{2}";
+	String namepattern="[A-Z][a-zA-Z ']*";
+	String salpattern="[1-9][0-9]*";
+	String despattern="[A-Z][a-zA-Z ]*";
+	public static boolean validate(String data,String pattern)
+	{
+		return data.matches(pattern);
+	}
+
+}
+
+		
+		
+		
+		
+
+
+	
+
+
